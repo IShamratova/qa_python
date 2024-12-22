@@ -9,4 +9,7 @@ test_get_books_genre,<br />
 test_get_books_for_children,<br />
 test_add_book_in_favorites,<br />
 test_delete_book_from_favorites,<br />
-test_get_list_of_favorites_books.
+test_delete_book_from_favorites_empty_favorites,<br />
+test_get_list_of_favorites_books,<br />
+test_get_list_of_favorites_books_empty_favorites,<br />
+test_get_list_of_favorites_books_empty_books_genre_empty_favorites.

@@ -2,28 +2,7 @@ import pytest
 
 from main import BooksCollector
 
-# класс TestBooksCollector объединяет набор тестов, которыми мы покрываем наше приложение BooksCollector
-# обязательно указывать префикс Test
 class TestBooksCollector:
-
-    # пример теста:
-    # обязательно указывать префикс test_
-    # дальше идет название метода, который тестируем add_new_book_
-    # затем, что тестируем add_two_books - добавление двух книг
-    def test_add_new_book_add_two_books(self):
-        # создаем экземпляр (объект) класса BooksCollector
-        collector = BooksCollector()
-
-        # добавляем две книги
-        collector.add_new_book('Гордость и предубеждение и зомби')
-        collector.add_new_book('Что делать, если ваш кот хочет вас убить')
-
-        # проверяем, что добавилось именно две
-        # словарь books_rating, который нам возвращает метод get_books_rating, имеет длину 2
-        assert len(collector.get_books_rating()) == 2
-
-    # напиши свои тесты ниже
-    # чтобы тесты были независимыми в каждом из них создавай отдельный экземпляр класса BooksCollector()
 
     def test_add_new_book(self):
         collector = BooksCollector()
@@ -129,34 +108,40 @@ class TestBooksCollector:
         collector.add_book_in_favorites(book_name)
         assert len(collector.get_list_of_favorites_books()) == expected_count_in_favorites
 
-    @pytest.mark.parametrize(
-        "book_name, add_in_favorites, expected_count_in_favorites, expected_result",
-        [
-            ['Гарри Поттер', True, 1, False],
-            ['Гарри Поттер', False, 0, False],
-        ],
-    )
-    def test_delete_book_from_favorites(self, book_name, add_in_favorites, expected_count_in_favorites, expected_result):
+    def test_delete_book_from_favorites(self):
+        book_name = 'Гарри Поттер'
         collector = BooksCollector()
         collector.add_new_book(book_name)
-        if add_in_favorites:
-            collector.add_book_in_favorites(book_name)
-        assert len(collector.get_list_of_favorites_books()) == expected_count_in_favorites
+        collector.add_book_in_favorites(book_name)
+        assert len(collector.get_list_of_favorites_books()) == 1
         collector.delete_book_from_favorites(book_name)
-        assert (book_name in collector.get_list_of_favorites_books()) == expected_result
+        assert (book_name in collector.get_list_of_favorites_books()) == False
 
-    @pytest.mark.parametrize(
-        "book_name, add_in_favorites, expected_favorites_books",
-        [
-            ['Мастер и Маргарита', True, ['Мастер и Маргарита']],
-            ['Кошки-мышки', False, []],
-            ['', True, []],
-        ],
-    )
-    def test_get_list_of_favorites_books(self, book_name, add_in_favorites, expected_favorites_books):
+    def test_delete_book_from_favorites_empty_favorites(self):
+        book_name = 'Гарри Поттер'
         collector = BooksCollector()
         collector.add_new_book(book_name)
-        if add_in_favorites:
-            collector.add_book_in_favorites(book_name)
-        assert collector.get_list_of_favorites_books() == expected_favorites_books
+        assert len(collector.get_list_of_favorites_books()) == 0
+        collector.delete_book_from_favorites(book_name)
+        assert (book_name in collector.get_list_of_favorites_books()) == False
+
+    def test_get_list_of_favorites_books(self):
+        book_name = 'Мастер и Маргарита'
+        collector = BooksCollector()
+        collector.add_new_book(book_name)
+        collector.add_book_in_favorites(book_name)
+        assert collector.get_list_of_favorites_books() == [book_name]
+
+    def test_get_list_of_favorites_books_empty_favorites(self):
+        book_name = 'Кошки-мышки'
+        collector = BooksCollector()
+        collector.add_new_book(book_name)
+        assert collector.get_list_of_favorites_books() == []
+
+    def test_get_list_of_favorites_books_empty_books_genre_empty_favorites(self):
+        book_name = ''
+        collector = BooksCollector()
+        collector.add_new_book(book_name)
+        collector.add_book_in_favorites(book_name)
+        assert collector.get_list_of_favorites_books() == []
 
